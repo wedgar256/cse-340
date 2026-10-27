@@ -1,0 +1,15 @@
+{
+  "name": "cse-340",
+  "version": "1.0.0",
+  "description": "CSE 340 Project",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0"
+  }
+}
