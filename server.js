@@ -1,19 +1,24 @@
-require("dotenv").config();
 const express = require("express");
 const app = express();
-const baseRoutes = require("./routes/baseRoute");
+require("dotenv").config();
+const baseController = require("./controllers/baseController");
 
+// Set View Engine to EJS
 app.set("view engine", "ejs");
+
+// STATIC MIDDLEWARE (Serves CSS and images from public folder)
 app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
 
-app.use("/", baseRoutes);
+// Routes for Home, Organizations, Projects, and Categories
+app.get("/", baseController.buildHome);
+app.get("/organizations", baseController.buildOrganizations);
+app.get("/projects", baseController.buildProjects);
+app.get("/categories", baseController.buildCategories);
 
-app.use((req, res, next) => {
-  res.status(404).render("index", { title: "Page Not Found" });
-});
-
+// Server Port Configuration
 const port = process.env.PORT || 3000;
+const host = process.env.HOST || "localhost";
+
 app.listen(port, () => {
-  console.log(`App listening on http://localhost:${port}`);
+  console.log(`App listening on http://${host}:${port}`);
 });
