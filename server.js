@@ -17,8 +17,8 @@ app.get("/categories", baseController.buildCategories);
 
 // Server Port Configuration
 const port = process.env.PORT || 3000;
-const host = process.env.HOST || "localhost";
+const host = process.env.HOST || "0.0.0.0";
 
-app.listen(port, () => {
+app.listen(port, host, () => {
   console.log(`App listening on http://${host}:${port}`);
 });

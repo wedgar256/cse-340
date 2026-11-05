@@ -2,6 +2,8 @@
 <section class="hero">
   <h1>Welcome to CSE 340 Portal</h1>
   <p>Your centralized platform for managing organizations, projects, and categories.</p>
-  <img src="/images/hero-image.svg" alt="CSE 340 Portal Overview" class="hero-img">
+  <% if (heroImage) { %>
+    <img src="<%= heroImage %>" alt="CSE 340 Portal Overview" class="hero-img">
+  <% } %>
 </section>
 <%- include('partials/footer') %>
