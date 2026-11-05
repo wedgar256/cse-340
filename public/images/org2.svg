@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Community Builders Logo">
+  <rect width="200" height="200" rx="30" fill="#14532d"/>
+  <circle cx="100" cy="66" r="34" fill="#a7f3d0"/>
+  <path d="M44 142c8-24 27-38 56-38s48 14 56 38" fill="#f0fdf4"/>
+  <circle cx="66" cy="84" r="8" fill="#14532d"/>
+  <circle cx="134" cy="84" r="8" fill="#14532d"/>
+</svg>

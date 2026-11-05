@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Green Energy Corp Logo">
+  <rect width="200" height="200" rx="30" fill="#ecfccb"/>
+  <path d="M40 120c19-38 42-58 60-58 16 0 38 16 60 58H40z" fill="#22c55e"/>
+  <path d="M100 34v88" stroke="#14532d" stroke-width="8" stroke-linecap="round"/>
+  <path d="M72 62l28 27 28-27" fill="none" stroke="#14532d" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

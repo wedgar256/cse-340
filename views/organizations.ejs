@@ -1,4 +1,20 @@
 <%- include('partials/header') %>
-<h1><%= title %></h1>
-<p>Welcome to the <%= title.toLowerCase() %> section of our CSE 340 application.</p>
+<h2>Organizations</h2>
+<div class="org-grid">
+  <div class="org-card">
+    <img src="/images/org1.svg" alt="Tech Innovators Logo">
+    <h3>Tech Innovators</h3>
+    <p>Technology strategy and product development.</p>
+  </div>
+  <div class="org-card">
+    <img src="/images/org2.svg" alt="Community Builders Logo">
+    <h3>Community Builders</h3>
+    <p>Engaging local partnerships and outreach initiatives.</p>
+  </div>
+  <div class="org-card">
+    <img src="/images/org3.svg" alt="Green Energy Corp Logo">
+    <h3>Green Energy Corp</h3>
+    <p>Sustainable energy planning and environmental impact.</p>
+  </div>
+</div>
 <%- include('partials/footer') %>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-labelledby="title desc">
+  <title id="title">CSE 340 Portal</title>
+  <desc id="desc">A stylized dashboard illustration representing an organization portal.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#eff6ff"/>
+      <stop offset="100%" stop-color="#dbeafe"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bg)" rx="30"/>
+  <rect x="60" y="80" width="680" height="340" rx="20" fill="url(#panel)"/>
+  <rect x="110" y="130" width="200" height="22" rx="11" fill="#93c5fd"/>
+  <rect x="110" y="175" width="320" height="18" rx="9" fill="#bfdbfe"/>
+  <rect x="110" y="210" width="260" height="18" rx="9" fill="#bfdbfe"/>
+  <rect x="110" y="265" width="185" height="110" rx="14" fill="#60a5fa"/>
+  <rect x="330" y="265" width="185" height="110" rx="14" fill="#38bdf8"/>
+  <rect x="550" y="265" width="120" height="110" rx="14" fill="#1d4ed8"/>
+  <circle cx="640" cy="150" r="45" fill="#fbbf24"/>
+  <path d="M620 150l15 16 30-36" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="110" y="90" font-family="Arial, sans-serif" font-size="32" font-weight="700" fill="#0f172a">CSE 340 Portal</text>
+</svg>
