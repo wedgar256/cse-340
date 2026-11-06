@@ -2,7 +2,13 @@
 <h2>Projects</h2>
 <ul class="project-list">
   <% projects.forEach((project) => { %>
-    <li><strong><%= project.name %>:</strong> <%= project.description %></li>
+    <li>
+      <strong><%= project.name %>:</strong>
+      <%= project.description %>
+      <% if (project.organization_name) { %>
+        <span> - <%= project.organization_name %></span>
+      <% } %>
+    </li>
   <% }); %>
 </ul>
 <%- include('partials/footer') %>

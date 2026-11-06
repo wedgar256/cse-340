@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-const baseController = require("./controllers/baseController");
+const baseRoute = require("./routes/baseRoute");
 
 // Set View Engine to EJS
 app.set("view engine", "ejs");
@@ -10,10 +10,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 
 // Routes for Home, Organizations, Projects, and Categories
-app.get("/", baseController.buildHome);
-app.get("/organizations", baseController.buildOrganizations);
-app.get("/projects", baseController.buildProjects);
-app.get("/categories", baseController.buildCategories);
+app.use("/", baseRoute);
 
 // Server Port Configuration
 const port = process.env.PORT || 3000;

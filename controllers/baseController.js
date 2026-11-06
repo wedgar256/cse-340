@@ -1,35 +1,8 @@
+const { getOrganizations } = require("../models/organizationsModel");
+const { getProjects } = require("../models/projectsModel");
+const { getCategories } = require("../models/categoriesModel");
+
 const baseController = {};
-
-const organizations = [
-  {
-    name: "Tech Innovators",
-    logo: "/images/org1.svg",
-    description: "Technology strategy and product development."
-  },
-  {
-    name: "Community Builders",
-    logo: "/images/org2.svg",
-    description: "Engaging local partnerships and outreach initiatives."
-  },
-  {
-    name: "Green Energy Corp",
-    logo: "/images/org3.svg",
-    description: "Sustainable energy planning and environmental impact."
-  }
-];
-
-const projects = [
-  { name: "Project Alpha", description: "Inventory Management System" },
-  { name: "Project Beta", description: "Dynamic Database Dashboard" },
-  { name: "Project Gamma", description: "User Authentication Portal" }
-];
-
-const categories = [
-  { name: "Software Development" },
-  { name: "Database Administration" },
-  { name: "UI/UX Design" },
-  { name: "System Architecture" }
-];
 
 baseController.buildHome = async function (req, res) {
   res.render("index", {
@@ -39,24 +12,42 @@ baseController.buildHome = async function (req, res) {
 };
 
 baseController.buildOrganizations = async function (req, res) {
-  res.render("organizations", {
-    title: "Organizations",
-    organizations
-  });
+  try {
+    const organizations = await getOrganizations();
+    res.render("organizations", {
+      title: "Organizations",
+      organizations
+    });
+  } catch (error) {
+    console.error("Failed to load organizations:", error);
+    res.status(500).send("Unable to load organizations.");
+  }
 };
 
 baseController.buildProjects = async function (req, res) {
-  res.render("projects", {
-    title: "Projects",
-    projects
-  });
+  try {
+    const projects = await getProjects();
+    res.render("projects", {
+      title: "Projects",
+      projects
+    });
+  } catch (error) {
+    console.error("Failed to load projects:", error);
+    res.status(500).send("Unable to load projects.");
+  }
 };
 
 baseController.buildCategories = async function (req, res) {
-  res.render("categories", {
-    title: "Categories",
-    categories
-  });
+  try {
+    const categories = await getCategories();
+    res.render("categories", {
+      title: "Categories",
+      categories
+    });
+  } catch (error) {
+    console.error("Failed to load categories:", error);
+    res.status(500).send("Unable to load categories.");
+  }
 };
 
 module.exports = baseController;

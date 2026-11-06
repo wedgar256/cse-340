@@ -3,9 +3,9 @@
 <div class="org-grid">
   <% organizations.forEach((org) => { %>
     <div class="org-card">
-      <img src="<%= org.logo %>" alt="<%= org.name %> Logo">
+      <img src="<%= org.logo_url || org.logo %>" alt="<%= org.name %> Logo">
       <h3><%= org.name %></h3>
-      <p><%= org.description %></p>
+      <p><%= org.description || "Technology strategy and community engagement." %></p>
     </div>
   <% }); %>
 </div>
