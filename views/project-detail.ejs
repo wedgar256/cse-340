@@ -1,0 +1,14 @@
+<%- include('partials/header') %>
+<h2><%= project.name %></h2>
+<p><%= project.description || "No description available." %></p>
+<% if (project.organization_name) { %>
+  <p>Organization: <%= project.organization_name %></p>
+<% } %>
+<h3>Categories</h3>
+<ul class="category-list">
+  <% categories.forEach((category) => { %>
+    <li><a href="/categories/<%= category.category_id %>"><%= category.name %></a></li>
+  <% }); %>
+</ul>
+<p><a href="/projects">Back to projects</a></p>
+<%- include('partials/footer') %>

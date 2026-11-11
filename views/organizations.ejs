@@ -4,7 +4,7 @@
   <% organizations.forEach((org) => { %>
     <div class="org-card">
       <img src="<%= org.logo_url || org.logo %>" alt="<%= org.name %> Logo">
-      <h3><%= org.name %></h3>
+      <h3><a href="/organizations/<%= org.organization_id %>"><%= org.name %></a></h3>
       <p><%= org.description || "Technology strategy and community engagement." %></p>
     </div>
   <% }); %>

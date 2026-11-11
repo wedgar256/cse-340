@@ -2,7 +2,7 @@
 <h2>Categories</h2>
 <ul class="category-list">
   <% categories.forEach((category) => { %>
-    <li><%= category.name %></li>
+    <li><a href="/categories/<%= category.category_id %>"><%= category.name %></a></li>
   <% }); %>
 </ul>
 <%- include('partials/footer') %>

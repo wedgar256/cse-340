@@ -1,0 +1,7 @@
+<%- include('partials/header') %>
+<h2><%= organization.name %></h2>
+<% if (organization.logo_url) { %>
+  <img src="<%= organization.logo_url %>" alt="<%= organization.name %> Logo">
+<% } %>
+<p><a href="/organizations">Back to organizations</a></p>
+<%- include('partials/footer') %>
