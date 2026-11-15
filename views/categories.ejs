@@ -1,5 +1,6 @@
 <%- include('partials/header') %>
 <h2>Categories</h2>
+<p><a href="/categories/create">Create Category</a></p>
 <ul class="category-list">
   <% categories.forEach((category) => { %>
     <li><a href="/categories/<%= category.category_id %>"><%= category.name %></a></li>

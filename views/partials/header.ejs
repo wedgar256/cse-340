@@ -19,3 +19,17 @@
     </nav>
   </header>
   <main>
+    <% if (locals.successMessages && successMessages.length > 0) { %>
+      <div class="flash-messages">
+        <% successMessages.forEach((message) => { %>
+          <p class="flash flash-success"><%= message %></p>
+        <% }); %>
+      </div>
+    <% } %>
+    <% if (locals.errorMessages && errorMessages.length > 0) { %>
+      <div class="flash-messages">
+        <% errorMessages.forEach((message) => { %>
+          <p class="flash flash-error"><%= message %></p>
+        <% }); %>
+      </div>
+    <% } %>

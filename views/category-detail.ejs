@@ -6,5 +6,5 @@
     <li><a href="/projects/<%= project.project_id %>"><%= project.name %></a></li>
   <% }); %>
 </ul>
-<p><a href="/categories">Back to categories</a></p>
+<p><a href="/categories/<%= category.category_id %>/edit">Edit Category</a> | <a href="/categories">Back to categories</a></p>
 <%- include('partials/footer') %>

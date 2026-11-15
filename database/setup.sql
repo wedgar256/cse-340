@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS project_categories;
 DROP TABLE IF EXISTS projects;
 DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS organizations;
@@ -17,17 +18,26 @@ CREATE TABLE categories (
 CREATE TABLE projects (
   project_id SERIAL PRIMARY KEY,
   organization_id INTEGER NOT NULL,
-  category_id INTEGER NOT NULL,
   name VARCHAR(150) NOT NULL,
   description TEXT NOT NULL,
   CONSTRAINT fk_organization
     FOREIGN KEY (organization_id)
     REFERENCES organizations(organization_id)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE project_categories (
+  project_id INTEGER NOT NULL,
+  category_id INTEGER NOT NULL,
+  PRIMARY KEY (project_id, category_id),
+  CONSTRAINT fk_pc_project
+    FOREIGN KEY (project_id)
+    REFERENCES projects(project_id)
     ON DELETE CASCADE,
-  CONSTRAINT fk_category
+  CONSTRAINT fk_pc_category
     FOREIGN KEY (category_id)
     REFERENCES categories(category_id)
-    ON DELETE RESTRICT
+    ON DELETE CASCADE
 );
 
 INSERT INTO organizations (name, description, logo_url) VALUES
@@ -60,52 +70,54 @@ INSERT INTO categories (name) VALUES
   ('Environmental Stewardship'),
   ('Community Support');
 
-INSERT INTO projects (organization_id, category_id, name, description) VALUES
+INSERT INTO projects (organization_id, name, description) VALUES
   (
-    1,
     1,
     'Weekly Grocery Box Delivery',
     'Pack and deliver grocery boxes to older adults and families who cannot reach the pantry.'
   ),
   (
     1,
-    6,
     'Community Pantry Volunteer Shifts',
     'Welcome visitors, organize donations, and prepare the pantry for its weekly distribution.'
   ),
   (
-    2,
     2,
     'Winter Shelter Meal Service',
     'Prepare and serve warm evening meals for guests staying at the seasonal shelter.'
   ),
   (
     2,
-    4,
     'Wellness Check-In Program',
     'Make supportive check-in calls and connect shelter guests with local health resources.'
   ),
   (
-    3,
     3,
     'After-School Reading Partners',
     'Read with elementary students and help them build confidence and literacy skills.'
   ),
   (
     3,
-    6,
     'Youth Mentoring Circle',
     'Lead weekly activities that help young people develop friendships and practical life skills.'
   ),
   (
     4,
-    5,
     'Neighborhood Garden Workdays',
     'Maintain shared garden beds and grow fresh produce for nearby community members.'
   ),
   (
     4,
-    6,
     'Park and Trail Clean-Up',
     'Remove litter and care for accessible paths in neighborhood parks.'
   );
+
+INSERT INTO project_categories (project_id, category_id) VALUES
+  (1, 1),
+  (2, 6),
+  (3, 2),
+  (4, 4),
+  (5, 3),
+  (6, 6),
+  (7, 5),
+  (8, 6);

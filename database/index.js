@@ -19,4 +19,5 @@ pool.on("error", (error) => {
 
 module.exports = {
   query: (text, params) => pool.query(text, params),
+  connect: () => pool.connect(),
 };

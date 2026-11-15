@@ -1,0 +1,61 @@
+<%- include('partials/header') %>
+<h2><%= title %></h2>
+<% const fieldError = (field) => errors.find((error) => error.field === field); %>
+<% if (errors.length > 0) { %>
+  <div class="form-errors" role="alert">
+    <strong>Please fix the following:</strong>
+    <ul>
+      <% errors.forEach((error) => { %>
+        <li><%= error.message %></li>
+      <% }); %>
+    </ul>
+  </div>
+<% } %>
+<form action="<%= action %>" method="post" class="entity-form">
+  <div class="form-field">
+    <label for="organization_id">Organization *</label>
+    <select id="organization_id" name="organization_id" required>
+      <option value="">-- Select an organization --</option>
+      <% organizations.forEach((org) => { %>
+        <option
+          value="<%= org.organization_id %>"
+          <%= Number(project.organization_id) === org.organization_id ? 'selected' : '' %>
+        ><%= org.name %></option>
+      <% }); %>
+    </select>
+    <% if (fieldError('organization_id')) { %>
+      <p class="field-error"><%= fieldError('organization_id').message %></p>
+    <% } %>
+  </div>
+  <div class="form-field">
+    <label for="name">Name *</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      value="<%= project.name || '' %>"
+      maxlength="150"
+      required
+    >
+    <% if (fieldError('name')) { %>
+      <p class="field-error"><%= fieldError('name').message %></p>
+    <% } %>
+  </div>
+  <div class="form-field">
+    <label for="description">Description *</label>
+    <textarea
+      id="description"
+      name="description"
+      rows="5"
+      required
+    ><%= project.description || '' %></textarea>
+    <% if (fieldError('description')) { %>
+      <p class="field-error"><%= fieldError('description').message %></p>
+    <% } %>
+  </div>
+  <div class="form-actions">
+    <button type="submit"><%= project.project_id ? 'Save Changes' : 'Create Project' %></button>
+    <a href="<%= project.project_id ? '/projects/' + project.project_id : '/projects' %>" class="btn-secondary">Cancel</a>
+  </div>
+</form>
+<%- include('partials/footer') %>
