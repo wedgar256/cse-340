@@ -8,7 +8,7 @@ const pool = new Pool({
     process.env.NODE_ENV === "production"
       ? { rejectUnauthorized: false }
       : false,
-  connectionTimeoutMillis: 1000,
+  connectionTimeoutMillis: 5000,
   idleTimeoutMillis: 1000,
   max: 5,
 });

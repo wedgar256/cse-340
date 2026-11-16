@@ -3,10 +3,8 @@ const {
   getCategories,
   getCategoryById,
   addCategory,
-  updateCategory,
+  updateCategory: updateCategoryRecord,
 } = require("../models/categoriesModel");
-
-const categoryController = {};
 
 const collectErrors = (req) =>
   validationResult(req).array().map((error) => ({
@@ -21,7 +19,7 @@ const parseEntityId = (value) => {
 
 const isUniqueViolation = (error) => error && error.code === "23505";
 
-categoryController.buildCreateCategory = async function (req, res) {
+const buildCreateCategory = async (req, res) => {
   res.render("category-form", {
     title: "Create Category",
     action: "/categories",
@@ -32,7 +30,7 @@ categoryController.buildCreateCategory = async function (req, res) {
   });
 };
 
-categoryController.createCategory = async function (req, res) {
+const createCategory = async (req, res) => {
   const errors = collectErrors(req);
   const category = {
     name: req.body.name || "",
@@ -62,7 +60,7 @@ categoryController.createCategory = async function (req, res) {
   }
 };
 
-categoryController.buildEditCategory = async function (req, res) {
+const buildEditCategory = async (req, res) => {
   const id = parseEntityId(req.params.id);
   if (id === null) {
     return res.status(400).send("Invalid ID.");
@@ -85,7 +83,7 @@ categoryController.buildEditCategory = async function (req, res) {
   }
 };
 
-categoryController.updateCategory = async function (req, res) {
+const updateCategory = async (req, res) => {
   const id = parseEntityId(req.params.id);
   if (id === null) {
     return res.status(400).send("Invalid ID.");
@@ -107,7 +105,7 @@ categoryController.updateCategory = async function (req, res) {
   }
 
   try {
-    const updated = await updateCategory(id, category.name.trim());
+    const updated = await updateCategoryRecord(id, category.name.trim());
     if (!updated) {
       return res.status(404).send("Category not found.");
     }
@@ -124,4 +122,9 @@ categoryController.updateCategory = async function (req, res) {
   }
 };
 
-module.exports = categoryController;
+module.exports = {
+  buildCreateCategory,
+  createCategory,
+  buildEditCategory,
+  updateCategory,
+};

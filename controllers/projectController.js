@@ -5,11 +5,9 @@ const {
   getProjectById,
   getProjectCategoryIds,
   addProject,
-  updateProject,
+  updateProject: updateProjectRecord,
   updateProjectCategories,
 } = require("../models/projectsModel");
-
-const projectController = {};
 
 const collectErrors = (req) =>
   validationResult(req).array().map((error) => ({
@@ -22,7 +20,7 @@ const parseEntityId = (value) => {
   return Number.isSafeInteger(id) && id > 0 ? id : null;
 };
 
-projectController.buildCreateProject = async function (req, res) {
+const buildCreateProject = async (req, res) => {
   try {
     const organizations = await getOrganizations();
     return res.render("project-form", {
@@ -42,7 +40,7 @@ projectController.buildCreateProject = async function (req, res) {
   }
 };
 
-projectController.createProject = async function (req, res) {
+const createProject = async (req, res) => {
   const errors = collectErrors(req);
   const project = {
     organization_id: req.body.organization_id || "",
@@ -77,7 +75,7 @@ projectController.createProject = async function (req, res) {
   }
 };
 
-projectController.buildEditProject = async function (req, res) {
+const buildEditProject = async (req, res) => {
   const id = parseEntityId(req.params.id);
   if (id === null) {
     return res.status(400).send("Invalid ID.");
@@ -102,7 +100,7 @@ projectController.buildEditProject = async function (req, res) {
   }
 };
 
-projectController.updateProject = async function (req, res) {
+const updateProject = async (req, res) => {
   const id = parseEntityId(req.params.id);
   if (id === null) {
     return res.status(400).send("Invalid ID.");
@@ -129,7 +127,7 @@ projectController.updateProject = async function (req, res) {
       });
     }
 
-    const updated = await updateProject(
+    const updated = await updateProjectRecord(
       id,
       Number(project.organization_id),
       project.name.trim(),
@@ -147,7 +145,7 @@ projectController.updateProject = async function (req, res) {
   }
 };
 
-projectController.buildAssignCategories = async function (req, res) {
+const buildAssignCategories = async (req, res) => {
   const id = parseEntityId(req.params.id);
   if (id === null) {
     return res.status(400).send("Invalid ID.");
@@ -173,7 +171,7 @@ projectController.buildAssignCategories = async function (req, res) {
   }
 };
 
-projectController.assignCategories = async function (req, res) {
+const assignCategories = async (req, res) => {
   const id = parseEntityId(req.params.id);
   if (id === null) {
     return res.status(400).send("Invalid ID.");
@@ -211,4 +209,11 @@ projectController.assignCategories = async function (req, res) {
   }
 };
 
-module.exports = projectController;
+module.exports = {
+  buildCreateProject,
+  createProject,
+  buildEditProject,
+  updateProject,
+  buildAssignCategories,
+  assignCategories,
+};

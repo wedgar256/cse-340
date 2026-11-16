@@ -3,10 +3,8 @@ const {
   getOrganizations,
   getOrganizationById,
   addOrganization,
-  updateOrganization,
+  updateOrganization: updateOrganizationRecord,
 } = require("../models/organizationsModel");
-
-const organizationController = {};
 
 const collectErrors = (req) =>
   validationResult(req).array().map((error) => ({
@@ -19,7 +17,7 @@ const parseEntityId = (value) => {
   return Number.isSafeInteger(id) && id > 0 ? id : null;
 };
 
-organizationController.buildCreateOrganization = async function (req, res) {
+const buildCreateOrganization = async (req, res) => {
   res.render("organization-form", {
     title: "Create Organization",
     action: "/organizations",
@@ -32,7 +30,7 @@ organizationController.buildCreateOrganization = async function (req, res) {
   });
 };
 
-organizationController.createOrganization = async function (req, res) {
+const createOrganization = async (req, res) => {
   const errors = collectErrors(req);
   const organization = {
     name: req.body.name || "",
@@ -64,7 +62,7 @@ organizationController.createOrganization = async function (req, res) {
   }
 };
 
-organizationController.buildEditOrganization = async function (req, res) {
+const buildEditOrganization = async (req, res) => {
   const id = parseEntityId(req.params.id);
   if (id === null) {
     return res.status(400).send("Invalid ID.");
@@ -87,7 +85,7 @@ organizationController.buildEditOrganization = async function (req, res) {
   }
 };
 
-organizationController.updateOrganization = async function (req, res) {
+const updateOrganization = async (req, res) => {
   const id = parseEntityId(req.params.id);
   if (id === null) {
     return res.status(400).send("Invalid ID.");
@@ -111,7 +109,7 @@ organizationController.updateOrganization = async function (req, res) {
   }
 
   try {
-    const updated = await updateOrganization(
+    const updated = await updateOrganizationRecord(
       id,
       organization.name.trim(),
       organization.description.trim(),
@@ -129,4 +127,9 @@ organizationController.updateOrganization = async function (req, res) {
   }
 };
 
-module.exports = organizationController;
+module.exports = {
+  buildCreateOrganization,
+  createOrganization,
+  buildEditOrganization,
+  updateOrganization,
+};

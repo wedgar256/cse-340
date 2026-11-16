@@ -10,8 +10,6 @@ const {
   getCategoryProjects,
 } = require("../models/categoriesModel");
 
-const detailController = {};
-
 const parseEntityId = (value) => {
   const id = Number(value);
   return Number.isSafeInteger(id) && id > 0 ? id : null;
@@ -26,7 +24,7 @@ const rejectInvalidId = (req, res) => {
   return id;
 };
 
-detailController.buildOrganizationDetail = async function (req, res) {
+const buildOrganizationDetail = async (req, res) => {
   const id = rejectInvalidId(req, res);
   if (id === null) return;
 
@@ -45,7 +43,7 @@ detailController.buildOrganizationDetail = async function (req, res) {
   }
 };
 
-detailController.buildProjectDetail = async function (req, res) {
+const buildProjectDetail = async (req, res) => {
   const id = rejectInvalidId(req, res);
   if (id === null) return;
 
@@ -66,7 +64,7 @@ detailController.buildProjectDetail = async function (req, res) {
   }
 };
 
-detailController.buildCategoryDetail = async function (req, res) {
+const buildCategoryDetail = async (req, res) => {
   const id = rejectInvalidId(req, res);
   if (id === null) return;
 
@@ -87,4 +85,8 @@ detailController.buildCategoryDetail = async function (req, res) {
   }
 };
 
-module.exports = detailController;
+module.exports = {
+  buildOrganizationDetail,
+  buildProjectDetail,
+  buildCategoryDetail,
+};

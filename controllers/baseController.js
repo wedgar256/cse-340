@@ -2,16 +2,14 @@ const { getOrganizations } = require("../models/organizationsModel");
 const { getProjects } = require("../models/projectsModel");
 const { getCategories } = require("../models/categoriesModel");
 
-const baseController = {};
-
-baseController.buildHome = async function (req, res) {
+const buildHome = async (req, res) => {
   res.render("index", {
     title: "Home",
     heroImage: "/images/hero-image.svg"
   });
 };
 
-baseController.buildOrganizations = async function (req, res) {
+const buildOrganizations = async (req, res) => {
   try {
     const organizations = await getOrganizations();
     res.render("organizations", {
@@ -24,7 +22,7 @@ baseController.buildOrganizations = async function (req, res) {
   }
 };
 
-baseController.buildProjects = async function (req, res) {
+const buildProjects = async (req, res) => {
   try {
     const projects = await getProjects();
     res.render("projects", {
@@ -37,7 +35,7 @@ baseController.buildProjects = async function (req, res) {
   }
 };
 
-baseController.buildCategories = async function (req, res) {
+const buildCategories = async (req, res) => {
   try {
     const categories = await getCategories();
     res.render("categories", {
@@ -50,4 +48,9 @@ baseController.buildCategories = async function (req, res) {
   }
 };
 
-module.exports = baseController;
+module.exports = {
+  buildHome,
+  buildOrganizations,
+  buildProjects,
+  buildCategories,
+};
