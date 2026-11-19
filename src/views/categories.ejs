@@ -1,0 +1,16 @@
+<%- include('partials/header') %>
+<main>
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">Ways to serve</p>
+      <h1><%= title %></h1>
+      <p>Browse the focus areas represented by our service opportunities.</p>
+    </div>
+  </div>
+  <ul class="card-grid category-list">
+    <% categories.forEach(category => { %>
+      <li class="data-card category-card"><span class="category-mark" aria-hidden="true">✦</span><h2><%= category.name %></h2></li>
+    <% }); %>
+  </ul>
+</main>
+<%- include('partials/footer') %>

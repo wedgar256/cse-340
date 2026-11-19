@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+  <main>
+    <p class="eyebrow">Community partner</p>
+    <h1><%= title %></h1>
+    <section class="detail-card organization-detail">
+      <img class="detail-logo" src="/images/<%= organizationDetails.logo_filename %>" alt="<%= organizationDetails.name %> logo">
+      <div class="detail-content">
+        <h2><%= organizationDetails.name %></h2>
+        <p><%= organizationDetails.description %></p>
+        <p><strong>Contact:</strong> <a href="mailto:<%= organizationDetails.contact_email %>"><%= organizationDetails.contact_email %></a></p>
+        <div class="card-actions">
+          <a class="button button-primary" href="/edit-organization/<%= organizationDetails.organization_id %>">Edit organization</a>
+          <a class="button button-quiet" href="/organizations">All organizations</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="related-section">
+      <div class="section-heading">
+        <h2>Service projects</h2>
+        <span class="result-count"><%= projects.length %> opportunities</span>
+      </div>
+      <% if (projects.length > 0) { %>
+      <ul class="card-grid project-grid">
+      <% projects.forEach(project => { %>
+          <li class="data-card project-card">
+            <div class="card-content">
+              <h3><a href="/project/<%= project.project_id %>"><%= project.title %></a></h3>
+              <p><%= project.description %></p>
+              <div class="project-meta">
+                <span><strong>Location</strong><%= project.location %></span>
+                <span><strong>Date</strong><%= project.date %></span>
+              </div>
+            </div>
+            <div class="card-actions">
+              <a class="button button-secondary" href="/project/<%= project.project_id %>">View project</a>
+            </div>
+          </li>
+      <% }); %>
+    </ul>
+      <% } else { %>
+        <p class="empty-state">There are no service projects for this organization yet.</p>
+      <% } %>
+    </section>
+  </main>
+<%- include('partials/footer') %>

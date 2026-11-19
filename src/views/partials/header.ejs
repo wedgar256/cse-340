@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-brand" href="/">CSE 340 Service Network</a>
+    <nav aria-label="Main navigation">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/organizations">Organizations</a></li>
+        <li><a href="/projects">Projects</a></li>
+        <li><a href="/categories">Categories</a></li>
+      </ul>
+    </nav>
+  </header>
+  <% const flashMessages = flash(); %>
+  <div class="flash-messages" aria-live="polite">
+    <% Object.entries(flashMessages).forEach(([type, messages]) => { %>
+      <% messages.forEach(message => { %>
+        <p class="flash-message flash-<%= type %>" role="<%= type === 'error' ? 'alert' : 'status' %>"><%= message %></p>
+      <% }); %>
+    <% }); %>
+  </div>

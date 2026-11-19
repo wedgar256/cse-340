@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+<main>
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">Our community partners</p>
+      <h1><%= title %></h1>
+      <p>Meet the organizations connecting volunteers with meaningful work.</p>
+    </div>
+    <a class="button button-primary" href="/new-organization">Add an organization</a>
+  </div>
+
+  <ul class="card-grid organization-grid">
+    <% organizations.forEach(organization => { %>
+      <li class="data-card organization-card">
+        <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
+        <div class="card-content">
+          <h2><%= organization.name %></h2>
+          <p class="contact-line"><a href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %></a></p>
+        </div>
+        <div class="card-actions">
+          <a class="button button-secondary" href="/organization/<%= organization.organization_id %>">View organization</a>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+</main>
+<%- include('partials/footer') %>

@@ -1,0 +1,32 @@
+<%- include('partials/header') %>
+<main>
+  <div class="page-heading">
+    <div>
+      <p class="eyebrow">Make a difference nearby</p>
+      <h1><%= title %></h1>
+      <p>Find a project where your time and skills can help.</p>
+    </div>
+    <a class="button button-primary" href="/new-project">Add a project</a>
+  </div>
+
+  <ul class="card-grid project-grid">
+    <% projects.forEach(project => { %>
+      <li class="data-card project-card">
+        <div class="card-content">
+          <p class="eyebrow">Service opportunity</p>
+          <h2><a href="/project/<%= project.project_id %>"><%= project.title %></a></h2>
+          <p><%= project.description %></p>
+          <div class="project-meta">
+            <span><strong>Location</strong><%= project.location %></span>
+            <span><strong>Date</strong><%= project.date %></span>
+          </div>
+        </div>
+        <div class="card-actions">
+          <a class="button button-secondary" href="/project/<%= project.project_id %>">View project</a>
+          <a class="button button-quiet" href="/assign-categories/<%= project.project_id %>">Edit categories</a>
+        </div>
+      </li>
+    <% }); %>
+  </ul>
+</main>
+<%- include('partials/footer') %>

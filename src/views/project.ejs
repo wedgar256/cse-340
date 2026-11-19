@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+<main>
+  <p class="eyebrow">Service opportunity</p>
+  <h1><%= projectDetails.title %></h1>
+  <section class="detail-card project-detail">
+    <div class="detail-content">
+      <p class="detail-description"><%= projectDetails.description %></p>
+      <div class="project-meta">
+        <span><strong>Location</strong><%= projectDetails.location %></span>
+        <span><strong>Date</strong><%= projectDetails.date %></span>
+        <span><strong>Organization</strong><a href="/organization/<%= projectDetails.organization_id %>"><%= projectDetails.organization_name %></a></span>
+      </div>
+      <div class="section-heading category-heading">
+        <h2>Categories</h2>
+        <a class="button button-quiet" href="/assign-categories/<%= projectDetails.project_id %>">Edit categories</a>
+      </div>
+      <% if (categories.length > 0) { %>
+        <ul class="card-grid category-list">
+      <% categories.forEach(category => { %>
+          <li class="data-card category-card"><span class="category-mark" aria-hidden="true">✦</span><h3><%= category.name %></h3></li>
+      <% }); %>
+        </ul>
+      <% } else { %>
+        <p class="empty-state">No categories have been assigned yet.</p>
+      <% } %>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>
