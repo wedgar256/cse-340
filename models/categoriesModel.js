@@ -14,7 +14,8 @@ const getCategoryById = async (categoryId) => {
 
 const getCategoryProjects = async (categoryId) => {
   const query = `
-    SELECT p.project_id, p.name, p.description
+    SELECT p.project_id, p.name, p.description, p.location,
+           to_char(p.date, 'YYYY-MM-DD') AS date
     FROM projects p
     INNER JOIN project_categories pc ON pc.project_id = p.project_id
     WHERE pc.category_id = $1

@@ -30,6 +30,8 @@ const buildCreateProject = async (req, res) => {
         organization_id: "",
         name: "",
         description: "",
+        location: "",
+        date: "",
       },
       organizations,
       errors: [],
@@ -46,6 +48,8 @@ const createProject = async (req, res) => {
     organization_id: req.body.organization_id || "",
     name: req.body.name || "",
     description: req.body.description || "",
+    location: req.body.location || "",
+    date: req.body.date || "",
   };
 
   try {
@@ -64,7 +68,9 @@ const createProject = async (req, res) => {
     await addProject(
       Number(project.organization_id),
       project.name.trim(),
-      project.description.trim()
+      project.description.trim(),
+      project.location.trim(),
+      project.date
     );
     req.flash("success", "Project created successfully.");
     return res.redirect("/projects");
@@ -112,6 +118,8 @@ const updateProject = async (req, res) => {
     organization_id: req.body.organization_id || "",
     name: req.body.name || "",
     description: req.body.description || "",
+    location: req.body.location || "",
+    date: req.body.date || "",
   };
 
   try {
@@ -131,7 +139,9 @@ const updateProject = async (req, res) => {
       id,
       Number(project.organization_id),
       project.name.trim(),
-      project.description.trim()
+      project.description.trim(),
+      project.location.trim(),
+      project.date
     );
     if (!updated) {
       return res.status(404).send("Project not found.");

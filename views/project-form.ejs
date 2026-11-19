@@ -53,6 +53,31 @@
       <p class="field-error"><%= fieldError('description').message %></p>
     <% } %>
   </div>
+  <div class="form-field">
+    <label for="location">Location</label>
+    <input
+      type="text"
+      id="location"
+      name="location"
+      value="<%= project.location || '' %>"
+      maxlength="150"
+    >
+    <% if (fieldError('location')) { %>
+      <p class="field-error"><%= fieldError('location').message %></p>
+    <% } %>
+  </div>
+  <div class="form-field">
+    <label for="date">Date</label>
+    <input
+      type="date"
+      id="date"
+      name="date"
+      value="<%= project.date || '' %>"
+    >
+    <% if (fieldError('date')) { %>
+      <p class="field-error"><%= fieldError('date').message %></p>
+    <% } %>
+  </div>
   <div class="form-actions">
     <button type="submit"><%= project.project_id ? 'Save Changes' : 'Create Project' %></button>
     <a href="<%= project.project_id ? '/projects/' + project.project_id : '/projects' %>" class="btn-secondary">Cancel</a>

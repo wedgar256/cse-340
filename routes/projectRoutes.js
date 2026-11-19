@@ -20,6 +20,15 @@ const projectRules = [
     .trim()
     .notEmpty()
     .withMessage("Description is required."),
+  body("location")
+    .optional({ checkFalsy: true })
+    .trim()
+    .isLength({ max: 150 })
+    .withMessage("Location must be 150 characters or fewer."),
+  body("date")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .withMessage("Date must be a valid date (YYYY-MM-DD)."),
 ];
 
 const assignCategoryRules = [

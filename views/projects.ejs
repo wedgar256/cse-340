@@ -9,6 +9,12 @@
       <% if (project.organization_name) { %>
         <span> - <%= project.organization_name %></span>
       <% } %>
+      <% if (project.location) { %>
+        <span> at <%= project.location %></span>
+      <% } %>
+      <% if (project.date) { %>
+        <span> on <%= project.date %></span>
+      <% } %>
     </li>
   <% }); %>
 </ul>

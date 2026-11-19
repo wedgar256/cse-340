@@ -2,7 +2,8 @@ const pool = require("../database");
 
 const getProjects = async () => {
   const query = `
-    SELECT p.project_id, p.name, p.description,
+    SELECT p.project_id, p.name, p.description, p.location,
+           to_char(p.date, 'YYYY-MM-DD') AS date,
            o.organization_id, o.name AS organization_name,
            COALESCE(
              string_agg(c.name, ', ' ORDER BY c.category_id),
@@ -21,7 +22,8 @@ const getProjects = async () => {
 
 const getProjectById = async (projectId) => {
   const query = `
-    SELECT p.project_id, p.name, p.description,
+    SELECT p.project_id, p.name, p.description, p.location,
+           to_char(p.date, 'YYYY-MM-DD') AS date,
            o.organization_id, o.name AS organization_name
     FROM projects p
     LEFT JOIN organizations o ON p.organization_id = o.organization_id
@@ -49,24 +51,44 @@ const getProjectCategoryIds = async (projectId) => {
   return result.rows.map((row) => row.category_id);
 };
 
-const addProject = async (organizationId, name, description) => {
+const addProject = async (organizationId, name, description, location, date) => {
   const query = `
-    INSERT INTO projects (organization_id, name, description)
-    VALUES ($1, $2, $3)
+    INSERT INTO projects (organization_id, name, description, location, date)
+    VALUES ($1, $2, $3, $4, $5)
     RETURNING *
   `;
-  const result = await pool.query(query, [organizationId, name, description]);
+  const result = await pool.query(query, [
+    organizationId,
+    name,
+    description,
+    location,
+    date || null,
+  ]);
   return result.rows[0];
 };
 
-const updateProject = async (projectId, organizationId, name, description) => {
+const updateProject = async (
+  projectId,
+  organizationId,
+  name,
+  description,
+  location,
+  date
+) => {
   const query = `
     UPDATE projects
-    SET organization_id = $1, name = $2, description = $3
-    WHERE project_id = $4
+    SET organization_id = $1, name = $2, description = $3, location = $4, date = $5
+    WHERE project_id = $6
     RETURNING *
   `;
-  const result = await pool.query(query, [organizationId, name, description, projectId]);
+  const result = await pool.query(query, [
+    organizationId,
+    name,
+    description,
+    location,
+    date || null,
+    projectId,
+  ]);
   return result.rows[0] || null;
 };
 
