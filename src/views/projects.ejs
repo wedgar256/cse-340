@@ -6,7 +6,9 @@
       <h1><%= title %></h1>
       <p>Find a project where your time and skills can help.</p>
     </div>
-    <a class="button button-primary" href="/new-project">Add a project</a>
+    <% if (user && user.role_name === 'admin') { %>
+      <a class="button button-primary" href="/new-project">Add a project</a>
+    <% } %>
   </div>
 
   <ul class="card-grid project-grid">
@@ -23,7 +25,9 @@
         </div>
         <div class="card-actions">
           <a class="button button-secondary" href="/project/<%= project.project_id %>">View project</a>
-          <a class="button button-quiet" href="/assign-categories/<%= project.project_id %>">Edit categories</a>
+          <% if (user && user.role_name === 'admin') { %>
+            <a class="button button-quiet" href="/assign-categories/<%= project.project_id %>">Edit categories</a>
+          <% } %>
         </div>
       </li>
     <% }); %>

@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+<main>
+  <p class="eyebrow">Administration</p>
+  <h1><%= title %></h1>
+  <% if (users.length) { %>
+    <div class="table-wrap">
+      <table>
+        <caption>Accounts registered in the service network</caption>
+        <thead><tr><th scope="col">Name</th><th scope="col">Email</th><th scope="col">Role</th></tr></thead>
+        <tbody>
+          <% users.forEach(account => { %>
+            <tr><td><%= account.name %></td><td><%= account.email %></td><td><%= account.role_name %></td></tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </div>
+  <% } else { %>
+    <p class="empty-state">No registered users yet.</p>
+  <% } %>
+</main>
+<%- include('partials/footer') %>

@@ -9,7 +9,9 @@
         <p><%= organizationDetails.description %></p>
         <p><strong>Contact:</strong> <a href="mailto:<%= organizationDetails.contact_email %>"><%= organizationDetails.contact_email %></a></p>
         <div class="card-actions">
-          <a class="button button-primary" href="/edit-organization/<%= organizationDetails.organization_id %>">Edit organization</a>
+          <% if (user && user.role_name === 'admin') { %>
+            <a class="button button-primary" href="/edit-organization/<%= organizationDetails.organization_id %>">Edit organization</a>
+          <% } %>
           <a class="button button-quiet" href="/organizations">All organizations</a>
         </div>
       </div>

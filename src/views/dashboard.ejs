@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+<main>
+  <p class="eyebrow">Your account</p>
+  <h1><%= title %></h1>
+  <section class="detail-card">
+    <div class="detail-content">
+      <h2>Welcome, <%= name %></h2>
+      <p>Email: <%= email %></p>
+      <% if (user && user.role_name === 'admin') { %>
+        <div class="card-actions">
+          <a class="button button-primary" href="/users">View registered users</a>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+<%- include('partials/footer') %>

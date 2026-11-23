@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+<main>
+  <h1><%= title %></h1>
+  <form class="form-card" action="/register" method="POST">
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" minlength="2" maxlength="100" autocomplete="name" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" maxlength="100" autocomplete="email" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" minlength="8" maxlength="72" autocomplete="new-password" required>
+      <small>Use 8 to 72 characters.</small>
+    </div>
+    <button type="submit">Create account</button>
+  </form>
+</main>
+<%- include('partials/footer') %>

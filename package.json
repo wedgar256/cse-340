@@ -8,6 +8,7 @@
     "dev": "nodemon --watch server.js --watch src --watch public/css --ext js,ejs,css,json server.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
