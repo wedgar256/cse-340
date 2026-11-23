@@ -5,6 +5,7 @@ import {
   createProject,
   getAllProjects,
   getProjectDetails,
+  updateProject,
 } from '../models/projects.js';
 
 const projectValidation = [
@@ -83,10 +84,79 @@ const processNewProjectForm = async (req, res) => {
   res.redirect(`/project/${projectId}`);
 };
 
+const formatDateInput = (value) => {
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    const year = value.getFullYear();
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const day = String(value.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  return String(value || '').slice(0, 10);
+};
+
+const showEditProjectForm = async (req, res) => {
+  const projectId = Number(req.params.projectId);
+  if (!Number.isSafeInteger(projectId) || projectId < 1) {
+    const err = new Error('Project Not Found');
+    err.status = 404;
+    throw err;
+  }
+
+  const projectDetails = await getProjectDetails(projectId);
+  if (!projectDetails) {
+    const err = new Error('Project Not Found');
+    err.status = 404;
+    throw err;
+  }
+
+  const organizations = await getAllOrganizations();
+  const projectDate = formatDateInput(projectDetails.date);
+  const title = 'Edit Service Project';
+  res.render('edit-project', { title, projectDetails, organizations, projectDate });
+};
+
+const processEditProjectForm = async (req, res) => {
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    validationErrors.array().forEach((error) => {
+      req.flash('error', error.msg);
+    });
+    return res.redirect(`/edit-project/${req.params.projectId}`);
+  }
+
+  const projectId = Number(req.params.projectId);
+  if (!Number.isSafeInteger(projectId) || projectId < 1) {
+    const err = new Error('Project Not Found');
+    err.status = 404;
+    throw err;
+  }
+
+  const { title, description, location, date, organizationId } = req.body;
+  const updatedProjectId = await updateProject(
+    projectId,
+    title,
+    description,
+    location,
+    date,
+    organizationId,
+  );
+  if (!updatedProjectId) {
+    const err = new Error('Project Not Found');
+    err.status = 404;
+    throw err;
+  }
+
+  req.flash('success', 'Service project updated successfully!');
+  res.redirect(`/project/${projectId}`);
+};
+
 export {
   showProjectsPage,
   showProjectDetailsPage,
   showNewProjectForm,
   processNewProjectForm,
+  showEditProjectForm,
+  processEditProjectForm,
   projectValidation,
 };

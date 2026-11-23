@@ -120,13 +120,12 @@ const processEditOrganizationForm = async (req, res) => {
     throw err;
   }
 
-  const { name, description, contactEmail, logoFilename } = req.body;
+  const { name, description, contactEmail } = req.body;
   const updatedOrganizationId = await updateOrganization(
     organizationId,
     name,
     description,
     contactEmail,
-    logoFilename,
   );
   if (!updatedOrganizationId) {
     const err = new Error('Organization Not Found');

@@ -10,6 +10,10 @@
         <span><strong>Date</strong><%= projectDetails.date %></span>
         <span><strong>Organization</strong><a href="/organization/<%= projectDetails.organization_id %>"><%= projectDetails.organization_name %></a></span>
       </div>
+      <div class="card-actions">
+        <a class="button button-primary" href="/edit-project/<%= projectDetails.project_id %>">Edit project</a>
+        <a class="button button-quiet" href="/projects">All projects</a>
+      </div>
       <div class="section-heading category-heading">
         <h2>Categories</h2>
         <a class="button button-quiet" href="/assign-categories/<%= projectDetails.project_id %>">Edit categories</a>

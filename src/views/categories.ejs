@@ -6,10 +6,19 @@
       <h1><%= title %></h1>
       <p>Browse the focus areas represented by our service opportunities.</p>
     </div>
+    <a class="button button-primary" href="/new-category">Add a category</a>
   </div>
   <ul class="card-grid category-list">
     <% categories.forEach(category => { %>
-      <li class="data-card category-card"><span class="category-mark" aria-hidden="true">✦</span><h2><%= category.name %></h2></li>
+      <li class="data-card category-card">
+        <span class="category-mark" aria-hidden="true">✦</span>
+        <div class="category-card-content">
+          <h2><%= category.name %></h2>
+          <div class="card-actions">
+            <a class="button button-quiet" href="/edit-category/<%= category.category_id %>">Edit category</a>
+          </div>
+        </div>
+      </li>
     <% }); %>
   </ul>
 </main>

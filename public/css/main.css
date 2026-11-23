@@ -361,6 +361,16 @@ button:focus-visible {
   font-size: 1.25rem;
 }
 
+.category-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.category-card-content .card-actions {
+  margin-top: 0.75rem;
+  padding-top: 0;
+}
+
 .detail-card {
   display: flex;
   align-items: flex-start;
