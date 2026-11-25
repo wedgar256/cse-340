@@ -25,7 +25,7 @@
       <% if (categories.length > 0) { %>
         <ul class="card-grid category-list">
       <% categories.forEach(category => { %>
-          <li class="data-card category-card"><span class="category-mark" aria-hidden="true">✦</span><h3><%= category.name %></h3></li>
+          <li class="data-card category-card"><span class="category-mark" aria-hidden="true">✦</span><h3><a href="/category/<%= category.category_id %>"><%= category.name %></a></h3></li>
       <% }); %>
         </ul>
       <% } else { %>

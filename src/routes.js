@@ -21,6 +21,7 @@ import {
 } from './controllers/projects.js';
 import {
   showCategoriesPage,
+  showCategoryDetailsPage,
   showNewCategoryForm,
   processNewCategoryForm,
   showEditCategoryForm,
@@ -62,6 +63,7 @@ router.post('/new-project', requireRole('admin'), projectValidation, processNewP
 router.get('/edit-project/:projectId', requireRole('admin'), showEditProjectForm);
 router.post('/edit-project/:projectId', requireRole('admin'), projectValidation, processEditProjectForm);
 router.get('/categories', showCategoriesPage);
+router.get('/category/:id', showCategoryDetailsPage);
 router.get('/new-category', requireRole('admin'), showNewCategoryForm);
 router.post('/new-category', requireRole('admin'), categoryValidation, processNewCategoryForm);
 router.get('/edit-category/:id', requireRole('admin'), showEditCategoryForm);

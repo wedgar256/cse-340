@@ -15,7 +15,7 @@
       <li class="data-card category-card">
         <span class="category-mark" aria-hidden="true">✦</span>
         <div class="category-card-content">
-          <h2><%= category.name %></h2>
+          <h2><a href="/category/<%= category.category_id %>"><%= category.name %></a></h2>
           <% if (user && user.role_name === 'admin') { %>
             <div class="card-actions">
               <a class="button button-quiet" href="/edit-category/<%= category.category_id %>">Edit category</a>

@@ -25,6 +25,20 @@ const getCategoriesByServiceProjectId = async (projectId) => {
   return result.rows;
 };
 
+const getProjectsByCategoryId = async (categoryId) => {
+  const query = `
+    SELECT project.project_id, project.title, project.description, project.location, project.date
+    FROM public.service_project AS project
+    INNER JOIN public.project_category AS project_category
+      ON project_category.project_id = project.project_id
+    WHERE project_category.category_id = $1
+    ORDER BY project.date, project.project_id;
+  `;
+
+  const result = await db.query(query, [categoryId]);
+  return result.rows;
+};
+
 const getCategoryById = async (categoryId) => {
   const query = `
     SELECT category_id, name
@@ -85,6 +99,7 @@ const updateCategoryAssignments = async (projectId, categoryIds) => {
 export {
   getAllCategories,
   getCategoriesByServiceProjectId,
+  getProjectsByCategoryId,
   getCategoryById,
   createCategory,
   updateCategory,

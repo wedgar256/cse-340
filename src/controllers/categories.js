@@ -1,6 +1,7 @@
 import {
   getAllCategories,
   getCategoriesByServiceProjectId,
+  getProjectsByCategoryId,
   getCategoryById,
   createCategory,
   updateCategory,
@@ -23,6 +24,19 @@ const showCategoriesPage = async (req, res) => {
   const categories = await getAllCategories();
   const title = 'Service Categories';
   res.render('categories', { title, categories });
+};
+
+const showCategoryDetailsPage = async (req, res) => {
+  const categoryId = parseCategoryId(req.params.id);
+  const categoryDetails = await getCategoryById(categoryId);
+  if (!categoryDetails) {
+    const err = new Error('Category Not Found');
+    err.status = 404;
+    throw err;
+  }
+
+  const projects = await getProjectsByCategoryId(categoryId);
+  res.render('category', { title: 'Category Details', categoryDetails, projects });
 };
 
 const parseProjectId = (value) => {
@@ -196,6 +210,7 @@ const processEditCategoryForm = async (req, res) => {
 
 export {
   showCategoriesPage,
+  showCategoryDetailsPage,
   showNewCategoryForm,
   processNewCategoryForm,
   showEditCategoryForm,
