@@ -3,13 +3,19 @@
   <h1><%= title %></h1>
 
   <form class="form-card" action="/edit-project/<%= projectDetails.project_id %>" method="POST">
+    <% if (errors && errors.length) { %>
+      <div class="validation-summary" role="alert" aria-labelledby="edit-project-errors-title">
+        <h2 id="edit-project-errors-title">Please fix these issues</h2>
+        <ul><% errors.forEach(error => { %><li><%= error.msg %></li><% }); %></ul>
+      </div>
+    <% } %>
     <div class="form-group">
       <label for="title">Project Title</label>
       <input
         type="text"
         id="title"
         name="title"
-        value="<%= projectDetails.title %>"
+        value="<%= formData.title !== undefined ? formData.title : projectDetails.title %>"
         minlength="3"
         maxlength="150"
         required
@@ -18,7 +24,7 @@
 
     <div class="form-group">
       <label for="description">Description</label>
-      <textarea id="description" name="description" maxlength="999" required><%= projectDetails.description %></textarea>
+    <textarea id="description" name="description" maxlength="999" required><%= formData.description !== undefined ? formData.description : projectDetails.description %></textarea>
     </div>
 
     <div class="form-group">
@@ -27,7 +33,7 @@
         type="text"
         id="location"
         name="location"
-        value="<%= projectDetails.location %>"
+        value="<%= formData.location !== undefined ? formData.location : projectDetails.location %>"
         maxlength="150"
         required
       >
@@ -35,7 +41,7 @@
 
     <div class="form-group">
       <label for="date">Date</label>
-      <input type="date" id="date" name="date" value="<%= projectDate %>" required>
+    <input type="date" id="date" name="date" value="<%= formData.date !== undefined ? formData.date : projectDate %>" required>
     </div>
 
     <div class="form-group">
@@ -45,7 +51,7 @@
         <% organizations.forEach(organization => { %>
           <option
             value="<%= organization.organization_id %>"
-            <%= organization.organization_id === projectDetails.organization_id ? 'selected' : '' %>
+            <%= String(formData.organizationId !== undefined ? formData.organizationId : projectDetails.organization_id) === String(organization.organization_id) ? 'selected' : '' %>
           ><%= organization.name %></option>
         <% }); %>
       </select>

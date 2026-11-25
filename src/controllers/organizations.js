@@ -11,16 +11,14 @@ const organizationValidation = [
   body('name')
     .trim()
     .isLength({ min: 3, max: 150 })
-    .withMessage('Organization name must be between 3 and 150 characters.')
-    .escape(),
+    .withMessage('Organization name must be between 3 and 150 characters.'),
   body('description')
     .trim()
     .notEmpty()
     .withMessage('Organization description is required.')
     .bail()
     .isLength({ max: 500 })
-    .withMessage('Organization description cannot exceed 500 characters.')
-    .escape(),
+    .withMessage('Organization description cannot exceed 500 characters.'),
   body('contactEmail')
     .trim()
     .isLength({ max: 255 })
@@ -65,24 +63,31 @@ const showOrganizationDetailsPage = async (req, res) => {
 
 const showNewOrganizationForm = async (req, res) => {
   const title = 'Add New Organization';
-  res.render('new-organization', { title });
+  res.render('new-organization', { title, formData: {}, errors: [] });
 };
 
 const processNewOrganizationForm = async (req, res) => {
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
-    validationErrors.array().forEach((error) => {
-      req.flash('error', error.msg);
+    return res.status(400).render('new-organization', {
+      title: 'Add New Organization',
+      formData: req.body,
+      errors: validationErrors.array(),
     });
-    return res.redirect('/new-organization');
   }
 
   const { name, description, contactEmail } = req.body;
   const logoFilename = 'placeholder-logo.png';
 
-  const organizationId = await createOrganization(name, description, contactEmail, logoFilename);
-  req.flash('success', 'Organization created successfully!');
-  res.redirect(`/organization/${organizationId}`);
+  try {
+    const organizationId = await createOrganization(name, description, contactEmail, logoFilename);
+    req.flash('success', 'Organization created successfully!');
+    return res.redirect(`/organization/${organizationId}`);
+  } catch (error) {
+    console.error('Create organization failed:', error);
+    req.flash('error', 'There was an error creating the organization. Please try again.');
+    return res.redirect('/new-organization');
+  }
 };
 
 const showEditOrganizationForm = async (req, res) => {
@@ -101,18 +106,10 @@ const showEditOrganizationForm = async (req, res) => {
   }
 
   const title = 'Edit Organization';
-  res.render('edit-organization', { title, organizationDetails });
+  res.render('edit-organization', { title, organizationDetails, formData: {}, errors: [] });
 };
 
 const processEditOrganizationForm = async (req, res) => {
-  const validationErrors = validationResult(req);
-  if (!validationErrors.isEmpty()) {
-    validationErrors.array().forEach((error) => {
-      req.flash('error', error.msg);
-    });
-    return res.redirect(`/edit-organization/${req.params.id}`);
-  }
-
   const organizationId = Number(req.params.id);
   if (!Number.isSafeInteger(organizationId) || organizationId < 1) {
     const err = new Error('Organization Not Found');
@@ -120,21 +117,44 @@ const processEditOrganizationForm = async (req, res) => {
     throw err;
   }
 
-  const { name, description, contactEmail } = req.body;
-  const updatedOrganizationId = await updateOrganization(
-    organizationId,
-    name,
-    description,
-    contactEmail,
-  );
-  if (!updatedOrganizationId) {
-    const err = new Error('Organization Not Found');
-    err.status = 404;
-    throw err;
+  const validationErrors = validationResult(req);
+  if (!validationErrors.isEmpty()) {
+    const organizationDetails = await getOrganizationDetails(organizationId);
+    if (!organizationDetails) {
+      const err = new Error('Organization Not Found');
+      err.status = 404;
+      throw err;
+    }
+    return res.status(400).render('edit-organization', {
+      title: 'Edit Organization',
+      organizationDetails,
+      formData: req.body,
+      errors: validationErrors.array(),
+    });
   }
 
-  req.flash('success', 'Organization updated successfully!');
-  res.redirect(`/organization/${organizationId}`);
+  const { name, description, contactEmail } = req.body;
+  try {
+    const updatedOrganizationId = await updateOrganization(
+      organizationId,
+      name,
+      description,
+      contactEmail,
+    );
+    if (!updatedOrganizationId) {
+      const err = new Error('Organization Not Found');
+      err.status = 404;
+      throw err;
+    }
+
+    req.flash('success', 'Organization updated successfully!');
+    return res.redirect(`/organization/${organizationId}`);
+  } catch (error) {
+    if (error.status === 404) throw error;
+    console.error('Update organization failed:', error);
+    req.flash('error', 'There was an error updating the organization. Please try again.');
+    return res.redirect(`/edit-organization/${organizationId}`);
+  }
 };
 
 export {

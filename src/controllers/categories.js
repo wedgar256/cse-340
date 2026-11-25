@@ -89,9 +89,15 @@ const processAssignCategoriesForm = async (req, res) => {
     throw err;
   }
 
-  await updateCategoryAssignments(projectId, categoryIds);
-  req.flash('success', 'Categories updated successfully.');
-  res.redirect(`/project/${projectId}`);
+  try {
+    await updateCategoryAssignments(projectId, categoryIds);
+    req.flash('success', 'Categories updated successfully.');
+    return res.redirect(`/project/${projectId}`);
+  } catch (error) {
+    console.error('Update project categories failed:', error);
+    req.flash('error', 'There was an error updating project categories. Please try again.');
+    return res.redirect(`/assign-categories/${projectId}`);
+  }
 };
 
 const parseCategoryId = (value) => {
@@ -113,22 +119,29 @@ const parseCategoryId = (value) => {
 
 const showNewCategoryForm = async (req, res) => {
   const title = 'Add New Category';
-  res.render('new-category', { title });
+  res.render('new-category', { title, formData: {}, errors: [] });
 };
 
 const processNewCategoryForm = async (req, res) => {
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
-    validationErrors.array().forEach((error) => {
-      req.flash('error', error.msg);
+    return res.status(400).render('new-category', {
+      title: 'Add New Category',
+      formData: req.body,
+      errors: validationErrors.array(),
     });
-    return res.redirect('/new-category');
   }
 
   const { name } = req.body;
-  await createCategory(name);
-  req.flash('success', 'Category created successfully!');
-  res.redirect('/categories');
+  try {
+    await createCategory(name);
+    req.flash('success', 'Category created successfully!');
+    return res.redirect('/categories');
+  } catch (error) {
+    console.error('Create category failed:', error);
+    req.flash('error', 'There was an error creating the category. Please try again.');
+    return res.redirect('/new-category');
+  }
 };
 
 const showEditCategoryForm = async (req, res) => {
@@ -141,29 +154,44 @@ const showEditCategoryForm = async (req, res) => {
   }
 
   const title = 'Edit Category';
-  res.render('edit-category', { title, categoryDetails });
+  res.render('edit-category', { title, categoryDetails, formData: {}, errors: [] });
 };
 
 const processEditCategoryForm = async (req, res) => {
+  const categoryId = parseCategoryId(req.params.id);
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
-    validationErrors.array().forEach((error) => {
-      req.flash('error', error.msg);
+    const categoryDetails = await getCategoryById(categoryId);
+    if (!categoryDetails) {
+      const err = new Error('Category Not Found');
+      err.status = 404;
+      throw err;
+    }
+    return res.status(400).render('edit-category', {
+      title: 'Edit Category',
+      categoryDetails,
+      formData: req.body,
+      errors: validationErrors.array(),
     });
-    return res.redirect(`/edit-category/${req.params.id}`);
   }
 
-  const categoryId = parseCategoryId(req.params.id);
   const { name } = req.body;
-  const updatedCategoryId = await updateCategory(categoryId, name);
-  if (!updatedCategoryId) {
-    const err = new Error('Category Not Found');
-    err.status = 404;
-    throw err;
-  }
+  try {
+    const updatedCategoryId = await updateCategory(categoryId, name);
+    if (!updatedCategoryId) {
+      const err = new Error('Category Not Found');
+      err.status = 404;
+      throw err;
+    }
 
-  req.flash('success', 'Category updated successfully!');
-  res.redirect('/categories');
+    req.flash('success', 'Category updated successfully!');
+    return res.redirect('/categories');
+  } catch (error) {
+    if (error.status === 404) throw error;
+    console.error('Update category failed:', error);
+    req.flash('error', 'There was an error updating the category. Please try again.');
+    return res.redirect(`/edit-category/${categoryId}`);
+  }
 };
 
 export {
