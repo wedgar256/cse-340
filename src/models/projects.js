@@ -43,14 +43,33 @@ const getProjectsByOrganizationId = async (organizationId) => {
   return result.rows;
 };
 
-const createProject = async (title, description, location, date, organizationId) => {
+const createProject = async (title, description, location, date, organizationId, categoryIds) => {
   const query = `
-    INSERT INTO public.service_project (title, description, location, date, organization_id)
-    VALUES ($1, $2, $3, $4, $5)
-    RETURNING project_id;
+    WITH inserted_project AS (
+      INSERT INTO public.service_project (title, description, location, date, organization_id)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING project_id
+    ),
+    assigned_categories AS (
+      INSERT INTO public.project_category (project_id, category_id)
+      SELECT inserted_project.project_id, selected.category_id
+      FROM inserted_project
+      LEFT JOIN LATERAL unnest($6::integer[]) AS selected(category_id) ON TRUE
+      RETURNING project_id
+    )
+    SELECT project_id
+    FROM assigned_categories
+    LIMIT 1;
   `;
 
-  const result = await db.query(query, [title, description, location, date, organizationId]);
+  const result = await db.query(query, [
+    title,
+    description,
+    location,
+    date,
+    organizationId,
+    categoryIds,
+  ]);
   if (result.rows.length === 0) {
     throw new Error('Failed to create project');
   }

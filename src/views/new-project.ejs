@@ -39,6 +39,28 @@
       </select>
     </div>
 
+    <fieldset class="form-group">
+      <legend>Categories</legend>
+      <p>Choose at least one category for this service project.</p>
+      <div class="card-grid category-choice-grid">
+        <% const selectedCategoryIds = Array.isArray(formData.categoryIds)
+          ? formData.categoryIds
+          : (formData.categoryIds ? [formData.categoryIds] : []); %>
+        <% categories.forEach(category => { %>
+          <label class="data-card category-choice-card" for="new-project-category-<%= category.category_id %>">
+            <input
+              type="checkbox"
+              id="new-project-category-<%= category.category_id %>"
+              name="categoryIds"
+              value="<%= category.category_id %>"
+              <%= selectedCategoryIds.some(id => String(id) === String(category.category_id)) ? 'checked' : '' %>
+            >
+            <span><%= category.name %></span>
+          </label>
+        <% }); %>
+      </div>
+    </fieldset>
+
     <button type="submit">Create Project</button>
   </form>
 </main>

@@ -1,5 +1,5 @@
 -- Run this against an existing course database to add Week 5 authentication.
--- Safe to run again: existing roles and the admin account are updated in place.
+-- Safe to run again: existing roles are updated in place.
 
 CREATE TABLE IF NOT EXISTS public.roles (
   role_id SERIAL PRIMARY KEY,
@@ -22,16 +22,11 @@ CREATE TABLE IF NOT EXISTS public.users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Grading account: admin@example.com / cse340!
-INSERT INTO public.users (name, email, password_hash, role_id)
-SELECT
-  'Administrator',
-  'admin@example.com',
-  '$2b$10$IkNZdO4mN/X/JpdRLZkV0O6.Cw1zFvCCkmsa019Q3RkA.zAWoS4pO',
-  role_id
-FROM public.roles
-WHERE role_name = 'admin'
-ON CONFLICT (email) DO UPDATE
-SET name = EXCLUDED.name,
-    password_hash = EXCLUDED.password_hash,
-    role_id = EXCLUDED.role_id;
+CREATE TABLE IF NOT EXISTS public.web_sessions (
+  session_id TEXT PRIMARY KEY,
+  session_data JSONB NOT NULL,
+  expires_at TIMESTAMPTZ NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS web_sessions_expires_at_idx
+  ON public.web_sessions(expires_at);

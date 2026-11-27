@@ -3,9 +3,10 @@ import session from 'express-session';
 import { fileURLToPath } from 'url';
 import path from 'path';
 import 'dotenv/config';
-import { testConnection } from './src/models/db.js';
+import db, { testConnection } from './src/models/db.js';
 import router from './src/routes.js';
 import flashMiddleware from './src/middleware/flash.js';
+import PostgresSessionStore from './src/middleware/postgres-session-store.js';
 
 const NODE_ENV = process.env.NODE_ENV?.toLowerCase() || 'production';
 const PORT = process.env.PORT || 3000;
@@ -29,6 +30,7 @@ if (NODE_ENV === 'production') {
 
 app.use(session({
   secret: SESSION_SECRET,
+  store: new PostgresSessionStore(db),
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -83,12 +85,15 @@ app.use((err, req, res, next) => {
   res.status(status).render(`errors/${template}`, context);
 });
 
-app.listen(PORT, async () => {
-  try {
-    await testConnection();
+const startServer = async () => {
+  await testConnection();
+  app.listen(PORT, () => {
     console.log(`Server is running at http://127.0.0.1:${PORT}`);
     console.log(`Environment: ${NODE_ENV}`);
-  } catch (error) {
-    console.error('Error connecting to the database:', error);
-  }
+  });
+};
+
+startServer().catch((error) => {
+  console.error('Unable to start server:', error);
+  process.exitCode = 1;
 });

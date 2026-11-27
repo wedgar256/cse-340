@@ -18,14 +18,21 @@ const loginValidation = [
 ];
 
 const showUserRegistrationForm = (req, res) => {
-  res.render('register', { title: 'Create an Account' });
+  res.render('register', {
+    title: 'Create an Account',
+    formData: {},
+    errors: [],
+  });
 };
 
 const processUserRegistrationForm = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errors.array().forEach(({ msg }) => req.flash('error', msg));
-    return res.redirect('/register');
+    return res.status(400).render('register', {
+      title: 'Create an Account',
+      formData: { name: req.body.name || '', email: req.body.email || '' },
+      errors: errors.array(),
+    });
   }
 
   try {
@@ -36,8 +43,11 @@ const processUserRegistrationForm = async (req, res) => {
     return res.redirect('/login');
   } catch (error) {
     if (error.code === '23505') {
-      req.flash('error', 'An account with that email already exists.');
-      return res.redirect('/register');
+      return res.status(409).render('register', {
+        title: 'Create an Account',
+        formData: { name: req.body.name || '', email: req.body.email || '' },
+        errors: [{ msg: 'An account with that email already exists.' }],
+      });
     }
     throw error;
   }
@@ -45,21 +55,27 @@ const processUserRegistrationForm = async (req, res) => {
 
 const showLoginForm = (req, res) => {
   if (req.query.loggedOut === '1') req.flash('success', 'You have been logged out.');
-  res.render('login', { title: 'Log In' });
+  res.render('login', { title: 'Log In', formData: {}, errors: [] });
 };
 
 const processLoginForm = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    errors.array().forEach(({ msg }) => req.flash('error', msg));
-    return res.redirect('/login');
+    return res.status(400).render('login', {
+      title: 'Log In',
+      formData: { email: req.body.email || '' },
+      errors: errors.array(),
+    });
   }
 
   const { email, password } = req.body;
   const user = await authenticateUser(email, password);
   if (!user) {
-    req.flash('error', 'Invalid email or password.');
-    return res.redirect('/login');
+    return res.status(401).render('login', {
+      title: 'Log In',
+      formData: { email },
+      errors: [{ msg: 'Invalid email or password.' }],
+    });
   }
 
   req.session.user = user;

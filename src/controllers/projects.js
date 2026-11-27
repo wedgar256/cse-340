@@ -37,6 +37,17 @@ const projectValidation = [
     .toInt(),
 ];
 
+const newProjectValidation = [
+  ...projectValidation,
+  body('categoryIds')
+    .custom((value) => {
+      const categoryIds = Array.isArray(value) ? value : [value];
+      return categoryIds.length > 0 && categoryIds.every((id) => /^\d+$/.test(id)
+        && Number.isSafeInteger(Number(id)) && Number(id) > 0);
+    })
+    .withMessage('Select at least one valid project category.'),
+];
+
 const showProjectsPage = async (req, res) => {
   const projects = await getAllProjects();
   const title = 'Service Projects';
@@ -64,26 +75,48 @@ const showProjectDetailsPage = async (req, res) => {
 };
 
 const showNewProjectForm = async (req, res) => {
-  const organizations = await getAllOrganizations();
+  const [organizations, categories] = await Promise.all([
+    getAllOrganizations(),
+    getAllCategories(),
+  ]);
   const title = 'Add New Service Project';
-  res.render('new-project', { title, organizations, formData: {}, errors: [] });
+  res.render('new-project', {
+    title, organizations, categories, formData: {}, errors: [],
+  });
 };
 
 const processNewProjectForm = async (req, res) => {
   const validationErrors = validationResult(req);
   if (!validationErrors.isEmpty()) {
-    const organizations = await getAllOrganizations();
+    const [organizations, categories] = await Promise.all([
+      getAllOrganizations(),
+      getAllCategories(),
+    ]);
     return res.status(400).render('new-project', {
       title: 'Add New Service Project',
       organizations,
+      categories,
       formData: req.body,
       errors: validationErrors.array(),
     });
   }
 
-  const { title, description, location, date, organizationId } = req.body;
+  const {
+    title, description, location, date, organizationId,
+  } = req.body;
+  const submittedCategoryIds = Array.isArray(req.body.categoryIds)
+    ? req.body.categoryIds
+    : [req.body.categoryIds];
+  const categoryIds = [...new Set(submittedCategoryIds.map(Number))];
   try {
-    const projectId = await createProject(title, description, location, date, organizationId);
+    const projectId = await createProject(
+      title,
+      description,
+      location,
+      date,
+      organizationId,
+      categoryIds,
+    );
     req.flash('success', 'New service project created successfully!');
     return res.redirect(`/project/${projectId}`);
   } catch (error) {
@@ -190,4 +223,5 @@ export {
   showEditProjectForm,
   processEditProjectForm,
   projectValidation,
+  newProjectValidation,
 };

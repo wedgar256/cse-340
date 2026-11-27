@@ -1,8 +1,19 @@
 import { Pool } from 'pg';
 
+const connectionString = process.env.DATABASE_URL || process.env.DB_URL;
+const nodeEnvironment = (process.env.NODE_ENV || 'production').toLowerCase();
+const databaseHost = connectionString ? new URL(connectionString).hostname : '';
+const useSsl = nodeEnvironment === 'production' || databaseHost.endsWith('.render.com');
+
 const pool = new Pool({
-  connectionString: process.env.DB_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  connectionString,
+  ssl: useSsl ? { rejectUnauthorized: false } : false,
+  connectionTimeoutMillis: 10000,
+  idleTimeoutMillis: 30000,
+});
+
+pool.on('error', (error) => {
+  console.error('Unexpected PostgreSQL pool error:', error.message);
 });
 
 let db = pool;
@@ -37,8 +48,8 @@ if (process.env.NODE_ENV === 'development' && process.env.ENABLE_SQL_LOGGING ===
 
 const testConnection = async () => {
   try {
-    if (!process.env.DB_URL) {
-      throw new Error('DB_URL is not set. Add your PostgreSQL connection URL to the local .env file.');
+    if (!connectionString) {
+      throw new Error('Database URL is missing. Set DATABASE_URL or DB_URL in the service environment.');
     }
 
     const result = await db.query('SELECT NOW() as current_time');

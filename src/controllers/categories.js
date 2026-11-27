@@ -102,6 +102,10 @@ const processAssignCategoriesForm = async (req, res) => {
     err.status = 404;
     throw err;
   }
+  if (categoryIds.length === 0) {
+    req.flash('error', 'Assign at least one category to this project.');
+    return res.redirect(`/assign-categories/${projectId}`);
+  }
 
   try {
     await updateCategoryAssignments(projectId, categoryIds);
